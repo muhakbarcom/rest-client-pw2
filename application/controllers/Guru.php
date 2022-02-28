@@ -42,6 +42,20 @@ class Guru extends CI_Controller
 
     public function create()
     {
+
+        $data = array(
+            'button' => 'Create',
+            'action' => site_url('guru/create_action'),
+            'nip' => set_value('nip'),
+            'nama' => set_value('nama'),
+            'tanggal_lahir' => set_value('tanggal_lahir'),
+            'jenis_kelamin' => set_value('jenis_kelamin'),
+            'agama' => set_value('agama'),
+            'pendidikan_terakhir' => set_value('pendidikan_terakhir'),
+            'golongan' => set_value('golongan'),
+            'alamat' => set_value('alamat'),
+            'hp' => set_value('hp'),
+        );
         $this->load->view('template/header');
         $this->load->view('guru/guru_form');
         $this->load->view('template/footer');
@@ -49,6 +63,16 @@ class Guru extends CI_Controller
 
     public function create_action()
     {
+        $nip = $this->input->post('nip', TRUE);
+        $nama = $this->input->post('nama', TRUE);
+        $tanggal_lahir = $this->input->post('tanggal_lahir', TRUE);
+        $jenis_kelamin = $this->input->post('jenis_kelamin', TRUE);
+        $agama = $this->input->post('agama', TRUE);
+        $pendidikan_terkahir = $this->input->post('pendidikan_terkahir', TRUE);
+        $golongan = $this->input->post('golongan', TRUE);
+        $alamat = $this->input->post('alamat', TRUE);
+        $hp = $this->input->post('hp', TRUE);
+
         // post
         $curl = curl_init();
 
@@ -61,7 +85,7 @@ class Guru extends CI_Controller
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => array('nip' => '213567', 'nama' => 'cecep', 'tanggal_lahir' => 'bandung, 6 juni 1980', 'jenis_kelamin' => 'laki-laki', 'agama' => 'islam', 'pendidikan_terakhir' => 'S1 teknik industri', 'golongan' => '2a', 'alamat' => 'bandung', 'hp' => '08765423145', 'X-API-KEY' => 'ebb2bee24cc1212e69540889fda7d979'),
+            CURLOPT_POSTFIELDS => array('nip' => $nip, 'nama' => $nama, 'tanggal_lahir' => $tanggal_lahir, 'jenis_kelamin' => $jenis_kelamin, 'agama' => $agama, 'pendidikan_terakhir' => $pendidikan_terkahir, 'golongan' => $golongan, 'alamat' => $alamat, 'hp' => $hp, 'X-API-KEY' => 'ebb2bee24cc1212e69540889fda7d979'),
 
             // basic auth
             CURLOPT_USERPWD => 'nazzilla:123',
@@ -83,15 +107,75 @@ class Guru extends CI_Controller
         }
     }
 
-    public function update()
+    public function update($id)
     {
+        // get data by id from http://akademik.d3mi.my.id/Api/biodata
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'http://akademik.d3mi.my.id/Api/biodata?X-API-KEY=ebb2bee24cc1212e69540889fda7d979',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            // basic auth
+            CURLOPT_USERPWD => 'nazzilla:123',
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/json',
+                'Accept: application/json'
+            ),
+
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+
+        // decode response
+        $response = json_decode($response, true);
+
+        // get response by id
+        foreach ($response['data'] as $key => $value) {
+            if ($value['id'] == $id) {
+                $data = array(
+                    'button' => 'Update',
+                    'action' => site_url('siswa/update_action'),
+                    'id' => set_value('id', $value['id']),
+                    'nip' => set_value('nip', $value['nip']),
+                    'nama' => set_value('nama', $value['nama']),
+                    'tanggal_lahir' => set_value('tanggal_lahir', $value['tanggal_lahir']),
+                    'jenis_kelamin' => set_value('jenis_kelamin', $value['jenis_kelamin']),
+                    'agama' => set_value('agama', $value['agama']),
+                    'pendidikan_terakhir' => set_value('pendidikan_terakhir', $value['pendidikan_terakhir']),
+                    'golongan' => set_value('golongan', $value['golongan']),
+                    'alamat' => set_value('alamat', $value['alamat']),
+                    'hp' => set_value('hp', $value['hp']),
+                );
+            }
+        }
+
         $this->load->view('template/header');
         $this->load->view('guru/guru_form');
         $this->load->view('template/footer');
     }
 
-    public function update_action($id)
+    public function update_action()
     {
+        $id = $this->input->post('id', TRUE); //hidden variable
+        $nip = $this->input->post('nip', TRUE);
+        $nama = $this->input->post('nama', TRUE);
+        $tanggal_lahir = $this->input->post('tanggal_lahir', TRUE);
+        $jenis_kelamin = $this->input->post('jenis_kelamin', TRUE);
+        $agama = $this->input->post('agama', TRUE);
+        $pendidikan_terakhir = $this->input->post('pendidikan_terakhir', TRUE);
+        $golongan = $this->input->post('golongan', TRUE);
+        $alamat = $this->input->post('alamat', TRUE);
+        $hp = $this->input->post('hp', TRUE);
+
+
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
@@ -103,7 +187,7 @@ class Guru extends CI_Controller
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'PUT',
-            CURLOPT_POSTFIELDS => "id_guru=$id&nip=9279483&nama=CECEP&tanggal_lahir=bandung%2C%206%20juni%201980&jenis_kelamin=laki-laki&agama=islam&pendidikan_terakhir=S1%20teknik%20industri&golongan=3a&alamat=bandung&hp=0993892748&X-API-KEY=ebb2bee24cc1212e69540889fda7d979",
+            CURLOPT_POSTFIELDS => "id_guru=$id&nip=$nip&nama=$nama&tanggal_lahir=$tanggal_lahir&jenis_kelamin=$jenis_kelamin&agama=$agama&pendidikan_terakhir=$pendidikan_terakhir&golongan=$golongan&alamat=$alamat&hp=$hp&X-API-KEY=ebb2bee24cc1212e69540889fda7d979",
             // basic auth
             CURLOPT_USERPWD => 'nazzilla:123',
 
