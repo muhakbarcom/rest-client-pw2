@@ -40,6 +40,65 @@ class Siswa extends CI_Controller
     $this->load->view('template/footer');
   }
 
+  public function read($id)
+  {
+    // get data by id from http://akademik.d3mi.my.id/Api/biodata
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+      CURLOPT_URL => 'http://akademik.d3mi.my.id/Api/guru?X-API-KEY=ebb2bee24cc1212e69540889fda7d979',
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_ENCODING => '',
+      CURLOPT_MAXREDIRS => 10,
+      CURLOPT_TIMEOUT => 0,
+      CURLOPT_FOLLOWLOCATION => true,
+      CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+      CURLOPT_CUSTOMREQUEST => 'GET',
+      // basic auth
+      CURLOPT_USERPWD => 'akbar:123',
+      CURLOPT_HTTPHEADER => array(
+        'Content-Type: application/json',
+        'Accept: application/json'
+      ),
+
+    ));
+
+    $response = curl_exec($curl);
+
+    curl_close($curl);
+
+    // decode response
+    $response = json_decode($response, true);
+    // var_dump($response);
+    // exit;
+
+    // get response by id
+    foreach ($response['data'] as $key => $value) {
+      if ($value['id'] == $id) {
+        $data = array(
+          'id' => $value['id'],
+          'nisn' => $value['nisn'],
+          'nama' => $value['nama'],
+          'alamat' => $value['alamat'],
+          'agama' => $value['agama'],
+          'jenis_kelamin' => $value['jenis_kelamin'],
+          'tanggal_lahir' => $value['tanggal_lahir'],
+          'nama_ayah' => $value['nama_ayah'],
+          'nama_ibu' => $value['nama_ibu'],
+        );
+      }
+    }
+
+    $response = array(
+      'data' => $data,
+    );
+
+    $this->load->view('template/header');
+    $this->load->view('siswa/read', $response);
+    $this->load->view('template/footer');
+  }
+
+
   public function create()
   {
     $data = array(
