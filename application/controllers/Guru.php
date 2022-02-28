@@ -40,6 +40,65 @@ class Guru extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    public function read($id)
+    {
+        // get data by id from http://akademik.d3mi.my.id/Api/biodata
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'http://akademik.d3mi.my.id/Api/guru?X-API-KEY=ebb2bee24cc1212e69540889fda7d979',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'GET',
+            // basic auth
+            CURLOPT_USERPWD => 'nazzilla:123',
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/json',
+                'Accept: application/json'
+            ),
+
+        ));
+
+        $response = curl_exec($curl);
+
+        curl_close($curl);
+
+        // decode response
+        $response = json_decode($response, true);
+        // var_dump($response);
+        // exit;
+
+        // get response by id
+        foreach ($response['data'] as $key => $value) {
+            if ($value['id_guru'] == $id) {
+                $data = array(
+                    'id_guru' => $value['id_guru'],
+                    'nip' => $value['nip'],
+                    'nama' => $value['nama'],
+                    'tanggal_lahir' => $value['tanggal_lahir'],
+                    'jenis_kelamin' => $value['jenis_kelamin'],
+                    'agama' => $value['agama'],
+                    'pendidikan_terakhir' => $value['pendidikan_terakhir'],
+                    'golongan' => $value['golongan'],
+                    'alamat' => $value['alamat'],
+                    'hp' => $value['hp'],
+                );
+            }
+        }
+
+        $response = array(
+            'data' => $data,
+        );
+
+        $this->load->view('template/header');
+        $this->load->view('guru/read', $response);
+        $this->load->view('template/footer');
+    }
+
     public function create()
     {
 
@@ -57,7 +116,7 @@ class Guru extends CI_Controller
             'hp' => set_value('hp'),
         );
         $this->load->view('template/header');
-        $this->load->view('guru/guru_form');
+        $this->load->view('guru/guru_form', $data);
         $this->load->view('template/footer');
     }
 
@@ -68,7 +127,7 @@ class Guru extends CI_Controller
         $tanggal_lahir = $this->input->post('tanggal_lahir', TRUE);
         $jenis_kelamin = $this->input->post('jenis_kelamin', TRUE);
         $agama = $this->input->post('agama', TRUE);
-        $pendidikan_terkahir = $this->input->post('pendidikan_terkahir', TRUE);
+        $pendidikan_terakhir = $this->input->post('pendidikan_terakhir', TRUE);
         $golongan = $this->input->post('golongan', TRUE);
         $alamat = $this->input->post('alamat', TRUE);
         $hp = $this->input->post('hp', TRUE);
@@ -85,7 +144,7 @@ class Guru extends CI_Controller
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => array('nip' => $nip, 'nama' => $nama, 'tanggal_lahir' => $tanggal_lahir, 'jenis_kelamin' => $jenis_kelamin, 'agama' => $agama, 'pendidikan_terakhir' => $pendidikan_terkahir, 'golongan' => $golongan, 'alamat' => $alamat, 'hp' => $hp, 'X-API-KEY' => 'ebb2bee24cc1212e69540889fda7d979'),
+            CURLOPT_POSTFIELDS => array('nip' => $nip, 'nama' => $nama, 'tanggal_lahir' => $tanggal_lahir, 'jenis_kelamin' => $jenis_kelamin, 'agama' => $agama, 'pendidikan_terakhir' => $pendidikan_terakhir, 'golongan' => $golongan, 'alamat' => $alamat, 'hp' => $hp, 'X-API-KEY' => 'ebb2bee24cc1212e69540889fda7d979'),
 
             // basic auth
             CURLOPT_USERPWD => 'nazzilla:123',
@@ -98,7 +157,7 @@ class Guru extends CI_Controller
         curl_close($curl);
 
         // if response status true, then redirect to index. if false, then show error flashdata
-        if ($response['status'] = true) {
+        if ($response['status'] == true) {
             $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhasil ditambahkan!</div>');
             redirect(base_url('guru'));
         } else {
@@ -113,7 +172,7 @@ class Guru extends CI_Controller
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'http://akademik.d3mi.my.id/Api/biodata?X-API-KEY=ebb2bee24cc1212e69540889fda7d979',
+            CURLOPT_URL => 'http://akademik.d3mi.my.id/Api/guru?X-API-KEY=ebb2bee24cc1212e69540889fda7d979',
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -139,11 +198,11 @@ class Guru extends CI_Controller
 
         // get response by id
         foreach ($response['data'] as $key => $value) {
-            if ($value['id'] == $id) {
+            if ($value['id_guru'] == $id) {
                 $data = array(
                     'button' => 'Update',
-                    'action' => site_url('siswa/update_action'),
-                    'id' => set_value('id', $value['id']),
+                    'action' => site_url('guru/update_action'),
+                    'id_guru' => set_value('id', $value['id_guru']),
                     'nip' => set_value('nip', $value['nip']),
                     'nama' => set_value('nama', $value['nama']),
                     'tanggal_lahir' => set_value('tanggal_lahir', $value['tanggal_lahir']),
@@ -158,13 +217,13 @@ class Guru extends CI_Controller
         }
 
         $this->load->view('template/header');
-        $this->load->view('guru/guru_form');
+        $this->load->view('guru/guru_form', $data);
         $this->load->view('template/footer');
     }
 
     public function update_action()
     {
-        $id = $this->input->post('id', TRUE); //hidden variable
+        $id = $this->input->post('id_guru', TRUE); //hidden variable
         $nip = $this->input->post('nip', TRUE);
         $nama = $this->input->post('nama', TRUE);
         $tanggal_lahir = $this->input->post('tanggal_lahir', TRUE);
@@ -174,7 +233,6 @@ class Guru extends CI_Controller
         $golongan = $this->input->post('golongan', TRUE);
         $alamat = $this->input->post('alamat', TRUE);
         $hp = $this->input->post('hp', TRUE);
-
 
         $curl = curl_init();
 
@@ -199,14 +257,16 @@ class Guru extends CI_Controller
 
         // decode response
         $response = json_decode($response, true);
+        // var_dump($response);
+        // exit;
 
         // if response status true, then redirect to index. if false, then show error flashdata
-        if ($response['status'] = true) {
+        if ($response['status'] == true) {
             $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data berhasil diubah!</div>');
             redirect(base_url('guru'));
         } else {
             $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Data gagal diubah!</div>');
-            redirect(base_url('guru/update'));
+            redirect(base_url('guru/update/' . $id));
         }
     }
 
@@ -223,7 +283,7 @@ class Guru extends CI_Controller
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'DELETE',
-            CURLOPT_POSTFIELDS => "X-API-KEY=ebb2bee24cc1212e69540889fda7d979&id=$id",
+            CURLOPT_POSTFIELDS => "X-API-KEY=ebb2bee24cc1212e69540889fda7d979&id_guru=$id",
             // basic auth
             CURLOPT_USERPWD => 'nazzilla:123',
         ));
