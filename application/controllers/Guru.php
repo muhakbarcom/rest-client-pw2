@@ -104,6 +104,7 @@ class Guru extends CI_Controller
 
         $data = array(
             'button' => 'Create',
+            'title' => 'Tambah Data Guru',
             'action' => site_url('guru/create_action'),
             'nip' => set_value('nip'),
             'nama' => set_value('nama'),
@@ -201,6 +202,7 @@ class Guru extends CI_Controller
             if ($value['id_guru'] == $id) {
                 $data = array(
                     'button' => 'Update',
+                    'title' => 'Edit Data Guru',
                     'action' => site_url('guru/update_action'),
                     'id_guru' => set_value('id', $value['id_guru']),
                     'nip' => set_value('nip', $value['nip']),

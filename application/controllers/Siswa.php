@@ -46,7 +46,7 @@ class Siswa extends CI_Controller
     $curl = curl_init();
 
     curl_setopt_array($curl, array(
-      CURLOPT_URL => 'http://akademik.d3mi.my.id/Api/guru?X-API-KEY=ebb2bee24cc1212e69540889fda7d979',
+      CURLOPT_URL => 'http://akademik.d3mi.my.id/Api/biodata?X-API-KEY=ebb2bee24cc1212e69540889fda7d979',
       CURLOPT_RETURNTRANSFER => true,
       CURLOPT_ENCODING => '',
       CURLOPT_MAXREDIRS => 10,
@@ -88,9 +88,11 @@ class Siswa extends CI_Controller
         );
       }
     }
+    // var_dump($data);
+    // exit;
 
     $response = array(
-      'data' => $data,
+      'data' => $data
     );
 
     $this->load->view('template/header');
@@ -103,6 +105,7 @@ class Siswa extends CI_Controller
   {
     $data = array(
       'button' => 'Create',
+      'title' => 'Tambah Data Siswa',
       'action' => site_url('siswa/create_action'),
       'nisn' => set_value('nisn'),
       'nama' => set_value('nama'),
@@ -202,6 +205,7 @@ class Siswa extends CI_Controller
       if ($value['id'] == $id) {
         $data = array(
           'button' => 'Update',
+          'title' => 'Edit Data Siswa',
           'action' => site_url('siswa/update_action'),
           'id' => set_value('id', $value['id']),
           'nisn' => set_value('nisn', $value['nisn']),

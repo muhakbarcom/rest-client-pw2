@@ -16,7 +16,7 @@
         <div class="icon-box">
           <div class="icon"><i class="ri-stack-line"></i></div>
           <h4 class="title"><a href="<?= base_url('guru'); ?>">Kelola Data Guru</a></h4>
-          <p class="description">Voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi</p>
+          <p class="description">Pengelolaan data guru yang memungkinkan user dapat melihat, menambah, mengubah, dan menghapus data guru</p>
         </div>
       </div>
 
@@ -24,7 +24,7 @@
         <div class="icon-box">
           <div class="icon"><i class="ri-palette-line"></i></div>
           <h4 class="title"><a href="<?= base_url('siswa'); ?>">Kelola Data Siswa</a></h4>
-          <p class="description">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore</p>
+          <p class="description">Pengelolaan data siswa yang memungkinkan user dapat melihat, menambah, mengubah, dan menghapus data siswa</p>
         </div>
       </div>
 
@@ -32,7 +32,7 @@
         <div class="icon-box">
           <div class="icon"><i class="ri-command-line"></i></div>
           <h4 class="title"><a href="<?= base_url('creator'); ?>">Creator</a></h4>
-          <p class="description">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia</p>
+          <p class="description">Nama-nama kelompok dalam pengerjaak proyek ini</p>
         </div>
       </div>
 
@@ -40,7 +40,7 @@
         <div class="icon-box">
           <div class="icon"><i class="ri-fingerprint-line"></i></div>
           <h4 class="title"><a target="_BLANK" href="http://api.muhakbar.com/">Api WMM</a></h4>
-          <p class="description">At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis</p>
+          <p class="description">Coba juga Rest API server yang kami buat di http://api.muhakbar.com</p>
         </div>
       </div>
 

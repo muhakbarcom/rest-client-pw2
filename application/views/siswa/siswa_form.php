@@ -2,7 +2,7 @@
 <section id="services" class="services section-bg">
     <div class="container" data-aos="fade-up">
         <div class="section-title">
-            <h2>Tambah Data Siswa</h2>
+            <h2><?= $title; ?></h2>
         </div>
         <div class="row content col-md-12 justify-content-center">
             <!-- if there flashdata message -->
@@ -51,7 +51,7 @@
                                         <option value="buddha">buddha</option>
                                         <option value="konghucu">konghucu</option>
                                     <?php else : ?>
-                                        <option value="">-- Pilih Hak Akses --</option>
+                                        <option value="">-- Pilih Agama --</option>
                                         <option value="Islam">Islam</option>
                                         <option value="protestan">Protestan</option>
                                         <option value="katolik">katoli</option>
@@ -84,7 +84,7 @@
                                     <option value="l">Laki-laki</option>
                                     <option value="p">Perempuan</option>
                                 <?php else : ?>
-                                    <option value="">-- Pilih Hak Akses --</option>
+                                    <option value="">-- Pilih Jenis Kelamin --</option>
                                     <option value="l">Laki-laki</option>
                                     <option value="p">Perempuan</option>
                                 <?php endif; ?>
@@ -116,8 +116,8 @@
 
                     <!-- if there $id_siswa -->
                     <?php
-                    if (isset($id_siswa)) {
-                        echo '<input type="hidden" name="id_siswa" value="' . $id_siswa . '" />';
+                    if (isset($id)) {
+                        echo '<input type="hidden" name="id" value="' . $id . '" />';
                     }
                     ?>
                     <button type="submit" class="btn btn-primary"><?php echo $button ?></button>
